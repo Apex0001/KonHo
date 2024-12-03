@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Chat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+    #chat {
+      display: none;
+      margin-top: 20px;
+    }
+    #messages {
+      width: 90%;
+      max-width: 500px;
+      height: 300px;
+      margin: 10px auto;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #fff;
+      overflow-y: auto;
+      padding: 10px;
+    }
+    #input {
+      width: 80%;
+      max-width: 400px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    #send {
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Random Chat</h1>
+  <div id="welcome">
+    <p>Click the button below to connect with a random user.</p>
+    <button id="connect">Start Chat</button>
+  </div>
+  <div id="chat">
+    <div id="messages"></div>
+    <input id="input" placeholder="Type your message..." />
+    <button id="send">Send</button>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    const connectButton = document.getElementById("connect");
+    const chatDiv = document.getElementById("chat");
+    const welcomeDiv = document.getElementById("welcome");
+    const messagesDiv = document.getElementById("messages");
+    const inputField = document.getElementById("input");
+    const sendButton = document.getElementById("send");
+
+    connectButton.addEventListener("click", () => {
+      socket.emit("find_partner");
+      welcomeDiv.style.display = "none";
+      chatDiv.style.display = "block";
+    });
+
+    socket.on("message", (msg) => {
+      const message = document.createElement("div");
+      message.textContent = msg;
+      messagesDiv.appendChild(message);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+
+    sendButton.addEventListener("click", () => {
+      const message = inputField.value.trim();
+      if (message) {
+        socket.emit("message", message);
+        inputField.value = "";
+      }
+    });
+  </script>
+</body>
+</html>

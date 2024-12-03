@@ -1,0 +1,15 @@
+{
+  "name": "random-chat",
+  "version": "1.0.0",
+  "description": "A simple anonymous random chat application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.4",
+    "socket.io": "^4.7.3"
+  },
+  "author": "Your Name",
+  "license": "MIT"
+}
